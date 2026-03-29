@@ -30,13 +30,9 @@ DATABASES = [
 ]
 
 
-def query_database(database_id, exclude_statuses):
+def fetch_all_pages(database_id):
     url = f"https://api.notion.com/v1/databases/{database_id}/query"
-    filter_conditions = [
-        {"property": "Status", "status": {"does_not_equal": s}}
-        for s in exclude_statuses
-    ]
-    payload = {"filter": {"and": filter_conditions}, "page_size": 100}
+    payload = {"page_size": 100}
     pages = []
     while True:
         resp = requests.post(url, headers=HEADERS, json=payload)
@@ -47,6 +43,11 @@ def query_database(database_id, exclude_statuses):
             break
         payload["start_cursor"] = data["next_cursor"]
     return pages
+
+
+def get_status(page):
+    status = page["properties"].get("Status", {}).get("status")
+    return status["name"] if status else None
 
 
 def update_date(page_id):
@@ -61,11 +62,12 @@ def main():
     total_updated = 0
 
     for db in DATABASES:
-        pages = query_database(db["id"], db["exclude_statuses"])
+        pages = fetch_all_pages(db["id"])
         count = 0
         for page in pages:
-            update_date(page["id"])
-            count += 1
+            if get_status(page) not in db["exclude_statuses"]:
+                update_date(page["id"])
+                count += 1
         print(f"  {db['name']}: updated {count} tasks")
         total_updated += count
 
