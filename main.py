@@ -20,7 +20,7 @@ DATABASES = [
     {
         "name": "Lightspeed",
         "id": "79e08774-3a4b-457c-aa88-8e2f66e1b66c",
-        "exclude_statuses": ["Done 🙌", "Notes", "Backlog"],
+        "exclude_statuses": ["Done", "Notes", "Backlog"],
     },
     {
         "name": "E-Commerce",
