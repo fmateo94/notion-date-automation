@@ -1,0 +1,26 @@
+name: Daily Notion Date Update
+
+on:
+  schedule:
+    # 8:00 AM PDT (UTC-7) = 15:00 UTC
+    # Note: adjust to 16:00 UTC during PST (Nov–Mar)
+    - cron: "0 15 * * *"
+  workflow_dispatch: # allows manual trigger from GitHub UI
+
+jobs:
+  update-dates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run date update
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: python main.py
