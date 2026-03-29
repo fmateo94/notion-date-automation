@@ -2,14 +2,16 @@ name: Daily Notion Date Update
 
 on:
   schedule:
-    # 8:00 AM PDT (UTC-7) = 15:00 UTC
-    # Note: adjust to 16:00 UTC during PST (Nov–Mar)
-    - cron: "0 15 * * *"
+    # 8:00 AM EDT (UTC-4) = 12:00 UTC (Mar–Nov)
+    # 8:00 AM EST (UTC-5) = 13:00 UTC (Nov–Mar)
+    - cron: "0 12 * * *"
   workflow_dispatch: # allows manual trigger from GitHub UI
 
 jobs:
   update-dates:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - uses: actions/checkout@v4
 
