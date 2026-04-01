@@ -2,9 +2,10 @@ name: Daily Notion Date Update
 
 on:
   schedule:
-    # 8:00 AM EDT (UTC-4) = 12:00 UTC (Mar–Nov)
-    # 8:00 AM EST (UTC-5) = 13:00 UTC (Nov–Mar)
-    - cron: "0 12 * * *"
+    # ~8:00 AM EDT (UTC-4) = 12:00 UTC (Mar–Nov)
+    # ~8:00 AM EST (UTC-5) = 13:00 UTC (Nov–Mar)
+    # Using :23 to avoid peak congestion at top of hour
+    - cron: "23 12 * * *"
   workflow_dispatch: # allows manual trigger from GitHub UI
 
 jobs:
